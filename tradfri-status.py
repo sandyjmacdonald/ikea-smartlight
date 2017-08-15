@@ -25,6 +25,7 @@
 
 from __future__ import print_function
 
+import os
 import sys
 import time
 import ConfigParser
@@ -34,11 +35,17 @@ from tqdm import tqdm
 
 def main():
     """ main function """
-    conf = ConfigParser.ConfigParser()
-    conf.read('tradfri.cfg')
+    hubip = os.environ.get("GATEWAY_IP", None)
+    securityid = os.environ.get("GATEWAY_KEY", None)
 
-    hubip = conf.get('tradfri', 'hubip')
-    securityid = conf.get('tradfri', 'securityid')
+    if not hubip:
+        conf = ConfigParser.ConfigParser()
+        conf.read('tradfri.cfg')
+        hubip = conf.get('tradfri', 'hubip')
+    if not securityid:
+        conf = ConfigParser.ConfigParser()
+        conf.read('tradfri.cfg')
+        securityid = conf.get('tradfri', 'securityid')
 
     lightbulb = []
     lightgroup = []
